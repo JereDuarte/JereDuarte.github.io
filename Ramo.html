@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjetita para Masi❤️‍🩹</title>
+    <style>
+        /* Estilos generales */
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #ff4d6d, #66101f);
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Botón para abrir la tarjeta */
+        .open-card-btn {
+            position: absolute;
+            background: white;
+            border: 3px solid red;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 5vw;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        .open-card-btn:hover {
+            background: red;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Contenedor de la tarjeta */
+        .card {
+            width: 80vw;
+            max-width: 350px;
+            height: 50vh;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            padding: 20px;
+            transform: scale(0);
+            transition: transform 0.5s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Mensaje con efecto de máquina de escribir */
+        .message {
+            font-size: 5vw;
+            color: #d00000;
+            font-weight: bold;
+            white-space: pre-line;
+            overflow: hidden;
+            border-right: 2px solid #d00000;
+            display: inline-block;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        /* Estilos del ramo de flores (canvas) */
+        canvas {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <style>
+        #ultimo + div {
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botón para abrir la tarjeta -->
+    <button class="open-card-btn" id="openButton" onclick="openCard()">💌 Abre tu tarjeta</button>
+
+    <!-- Tarjeta -->
+    <div class="card" id="card">
+        <h2>Happy Valentine 💐❤️</h2>
+        <p class="message" id="message"></p>
+       
+        <canvas id="canvas" width="300" height="400"></canvas>
+    </div>
+
+    <script>
+        function openCard() {
+            document.getElementById("openButton").style.display = "none";
+            document.getElementById("card").style.transform = "scale(1)";
+
+            // Esperar y mostrar el mensaje con efecto
+            setTimeout(() => {
+                typeMessage();
+                drawBouquet();
+            }, 500);
+        }
+
+        function typeMessage() {
+            let messageText = "Te amo mucho Masi.<br>Gracias por estar presente siempre!🌸💐💖";
+            let messageElement = document.getElementById("message");
+            let index = 0;
+
+            function type() {
+                if (index < messageText.length) {
+                    if (messageText.slice(index, index + 4) === "<br>") {
+                        messageElement.innerHTML += "<br>";
+                        index += 4; // Saltar la etiqueta <br>
+                    } else {
+                        messageElement.innerHTML += messageText[index];
+                        index++;
+                    }
+                    setTimeout(type, 100);
+                }
+            }
+            type();
+        }
+
+        // Funciones de dibujo
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2 + 100;
+
+        function drawFlower(x, y, color) {
+            for (let i = 0; i < 6; i++) {
+                ctx.beginPath();
+                const angle = (Math.PI * 2 / 6) * i;
+                const petalX = x + Math.cos(angle) * 20;
+                const petalY = y + Math.sin(angle) * 20;
+                ctx.arc(petalX, petalY, 15, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+            }
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, Math.PI * 2);
+            ctx.fillStyle = "yellow";
+            ctx.fill();
+        }
+
+        function drawStem(x, y) {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(centerX, centerY + 50);
+            ctx.strokeStyle = "green";
+            ctx.lineWidth = 4;
+            ctx.stroke();
+        }
+
+        function drawBouquet() {
+            const colors = ["#cc3f9f", "#ff6347", "#4e73df", "#f7b731", "#ff8c00", "#7fff00", "#ff1493", "#9b59b6", "#48c9b0", "#f39c12"];
+            let flowersDrawn = 0;
+            for (let i = 0; i < 20; i++) { 
+                setTimeout(() => {
+                    let x = centerX + (Math.random() * 100 - 50);
+                    let y = centerY - (Math.random() * 80 + 50);
+                    drawStem(x, y + 10);
+                    drawFlower(x, y, colors[i % colors.length]);
+                    flowersDrawn++;
+                    if (flowersDrawn === 20) {
+                        document.getElementById("mensaje").style.opacity = 1;
+                    }
+                }, i * 500);
+            }
+        }
+    </script>
+
+    <div id="ultimo"></div>
+</body>
+</html>
